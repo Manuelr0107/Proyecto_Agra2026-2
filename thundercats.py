@@ -67,3 +67,42 @@ def busquedaVelocidad(G, inicioLion, esSalida, distMutantes, velMutantes, velMin
       #si no escapó, entonces mira con una velocidad mas rápida entre velMedia y velMax
       busquedaVelocidad(G, inicioLion, esSalida, distMutantes, velMutantes, velMedia, velMax, eps, velMinima)
 
+#Una prueba
+def verPruebas(G, inicioLion, inicioMutantes, esSalida, velMutantes):
+  #si empiezan en el mismo nodo, los mutantes atrapan a Lion-O de una
+  if inicioLion==inicioMutantes:
+    print("Mumm-Ra captures Lion-O!")
+  else:
+    
+    distMutantes = [INF for _ in range(len(G))]#la distancia de los mutantes a cada nodo
+    dijkstra(G, inicioMutantes, distMutantes)
+
+    velMin=0.0 #velocidad mínima de Lion-O
+    velMax = 1e9 #velocidad máxima de Lion-O
+
+    #prueba con la velocidad más alta
+    logroEscapar= [False]
+    sipuedeEscapar(G, inicioLion, esSalida, distMutantes, velMutantes, velMax, logroEscapar)
+
+    if not logroEscapar[0]:
+      #ni con la velocidad más alta escapa
+      print("Mumm-Ra captures Lion-O!")
+    else:
+      #sí escap busca la velocidad más baja con la que todavía escapa
+      velMinima= [velMax]
+      busquedaVelocidad(G, inicioLion, esSalida, distMutantes, velMutantes, velMin, velMax, 1e-7, velMinima)
+      print(f"Lion-O can escape at a speed of {velMinima[0]:.6f} km/h!")  #:.6f imprime los 6 decimales 
+
+def main():
+  pruebas= int(stdin.readline())
+  for _ in range(pruebas):
+    #lee el primer caso de cada linea
+    nodos, carreteras, numSalidas, velMutantes= map(int, stdin.readline().split())
+
+    #En G[u] guarda los vecinos de u con la longitud 
+    G= [[] for _ in range(nodos + 1)]
+
+    for _ in range(carreteras): #las carreteras, agrega las aristas en los dos sentidos    
+      nodo1, nodo2, longitud= map(int, stdin.readline().split()) #lee los dos extremos de la carretera y su longitud                                             
+      G[nodo1].append((nodo2, longitud)) #desde el nodo1 se puede llegar al nodo2
+      G[nodo2].append((nodo1, longitud)) #y desde el nodo2 se puede llegar al nodo1
