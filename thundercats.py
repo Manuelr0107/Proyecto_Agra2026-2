@@ -2,8 +2,9 @@
 #Integrantes:
 # - Manuel Riascos Tovar
 # - Ana Sofía Guerrero
-# Idea: Dijkstra (uno a todos)
+# COmplejidad: O((n+m) log n)
 
+from sys import stdin
 from heapq import heappush, heappop
 INF=float('inf')
 
@@ -106,3 +107,14 @@ def main():
       nodo1, nodo2, longitud= map(int, stdin.readline().split()) #lee los dos extremos de la carretera y su longitud                                             
       G[nodo1].append((nodo2, longitud)) #desde el nodo1 se puede llegar al nodo2
       G[nodo2].append((nodo1, longitud)) #y desde el nodo2 se puede llegar al nodo1
+
+    inicioLion, inicioMutantes = map(int, stdin.readline().split())#lee los nodos de inicio de Lion-O y los mutantes
+    nodosSalidas = list(map(int, stdin.readline().split()))#lee los nodos de salida
+    esSalida = [0 for _ in range(nodos + 1)]#verifica si un nodo es salida o no en cada prueba
+    for salidaActual in nodosSalidas:
+      esSalida[salidaActual] = 1
+
+    verPruebas(G, inicioLion, inicioMutantes, esSalida, velMutantes)#con la prueba leida llama para ver si Lion-O puede escapar o no
+
+  return None
+main()
