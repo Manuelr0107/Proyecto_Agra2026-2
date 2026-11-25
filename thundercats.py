@@ -51,7 +51,19 @@ def sipuedeEscapar(G, inicioLion, esSalida, distMutantes, velMutantes, velLion, 
             if tiempoLionV <tiempoMutantesV and nuevaDist<distLion[v]:
               distLion[v]= nuevaDist #relajación mejor distancia a v
               heappush(pqueue, (distLion[v], v))
-
-
-
+#Búsqueda binaria para la velocidad minima de Lion-O
+def busquedaVelocidad(G, inicioLion, esSalida, distMutantes, velMutantes, velMin, velMax, eps, velMinima):
+  if velMax-velMin > eps: #si estan lejos se sigue buscando
+    velMedia= (velMin+velMax)/ 2.0 #la velocidad del medio
+    logroEscapar=[False]
+    #si Lion puede escapar a esa velocidad media 
+    sipuedeEscapar(G, inicioLion, esSalida, distMutantes, velMutantes, velMedia, logroEscapar)
+    
+    if logroEscapar[0]:
+      velMinima[0]= velMedia #si escapa se guarda la velocidad minima
+      #si escapa con la velocidad media, entonces esta entre la velocidad minima y la media
+      busquedaVelocidad(G, inicioLion, esSalida, distMutantes, velMutantes, velMin, velMedia, eps, velMinima)
+    else:
+      #si no escapó, entonces mira con una velocidad mas rápida entre velMedia y velMax
+      busquedaVelocidad(G, inicioLion, esSalida, distMutantes, velMutantes, velMedia, velMax, eps, velMinima)
 
